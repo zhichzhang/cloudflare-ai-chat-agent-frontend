@@ -7,7 +7,13 @@ This is a **Cloudflare Workers-based AI-powered chat application** built as part
 - **Session Memory**: Maintains conversation context for the current session using Workers KV.  
 - **Automatic Session Management**: Creates a unique session ID for each user on first message and automatically deletes it when the user leaves.  
 - **Dynamic Frontend**: Smooth UI with animated chat bubbles, loading indicators, and auto-scrolling.  
+- **Error Handling**: Displays error messages if the server response fails.  
 - **CORS Support**: API endpoints handle cross-origin requests for frontend integration.  
+
+## Tech Stack
+- **Frontend**: React, TypeScript, Framer Motion  
+- **Backend**: Cloudflare Workers + Workers KV  
+- **AI Model**: Llama 3.3 (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`)
 
 ## How It Works
 1. User sends a message via the chat input.  
