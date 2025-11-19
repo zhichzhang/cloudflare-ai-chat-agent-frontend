@@ -11,14 +11,14 @@ This is a **Cloudflare Workers-based AI-powered chat application** built as part
 - **CORS Support**: API endpoints handle cross-origin requests for frontend integration.  
 
 ## Tech Stack
-- **Frontend**: React, TypeScript, Framer Motion  
-- **Backend**: Cloudflare Workers + Workers KV  
-- **AI Model**: Llama 3.3 (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`)
+- **Frontend**: React, TypeScript, Vite, Framer Motion, Cloudflare Pages  
+- **Backend**: Cloudflare Workers, Workers KV  
+- **AI Model**: Llama 3.3 (`@cf/meta/llama-3.3-70b-instruct-fp8-fast`)  
 
 ## How It Works
 1. User sends a message via the chat input.  
 2. Frontend checks for a session ID; if none exists, the backend generates one.  
 3. Backend retrieves conversation history from KV and appends the new message.  
-4. AI model generates a reply, which is saved back to KV.  
+4. AI model generates a reply, which is streamed to the frontend and saved back to KV.  
 5. Frontend displays the AI response, maintaining chat history until the session ends.  
 6. When the user leaves, the session ID is automatically deleted to free up resources.
