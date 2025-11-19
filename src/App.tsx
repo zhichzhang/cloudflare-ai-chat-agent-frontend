@@ -4,6 +4,7 @@ import UserInput from "./components/UserInput";
 import MessageBubble from "./components/MessageBubble";
 import LoadingBar from "./components/LoadingBar";
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function App() {
   const [messages, setMessages] = useState<{ text: string; role: "user" | "agent"; time?: number }[]>([]);
@@ -21,7 +22,7 @@ export default function App() {
   setLoading(true);
 
   try {
-    const res = await fetch("/api/chat", {
+    const res = await fetch(`${API_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -50,7 +51,7 @@ export default function App() {
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (!sessionIdRef.current) return;
-      const url = "https://zhicheng-zhang-ai-app.zarchch14.workers.dev/api/end-session";
+      const url = `${API_URL}/api/end-session`;
       const data = JSON.stringify({ userId: sessionIdRef.current });
       const blob = new Blob([data], { type: "application/json" });
       navigator.sendBeacon(url, blob);
