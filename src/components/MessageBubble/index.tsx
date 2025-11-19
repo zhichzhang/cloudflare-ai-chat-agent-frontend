@@ -1,31 +1,53 @@
 import styles from "./index.module.less";
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import { motion } from "framer-motion";
 
-interface MessageBubbleProps {
-  text?: string;
-  role?: "user" | "agent";
-  timeStamp?: number;
+export interface Message {
+  content: string | string[];
+  role: "user" | "agent";
+  time?: number;
+  streaming?: boolean;
 }
 
-export default function MessageBubble({
-  text = "Default message",
-  role = "user",
-  timeStamp,
-}: MessageBubbleProps) {
+type MessageBubbleProps = Message
 
-  const formattedTime = timeStamp ? new Date(timeStamp).toLocaleString() : "";
+export default function MessageBubble({
+  content = "Default message",
+  role = "user",
+  time,
+  streaming = false,
+}: MessageBubbleProps) {
+  const formattedTime = time ? new Date(time).toLocaleTimeString() : "";
+  const lines = Array.isArray(content) ? content : [content];
 
   return (
-    <div
-      className={`${styles.messageRow} ${
-        role === "user" ? styles.userRow : styles.agentRow
-      }`}
+    <motion.div
+      className={`${styles.messageRow} ${role === "user" ? styles.userRow : styles.agentRow}`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
       <div className={styles.bubble}>
-        <div className={styles.text}>{text}</div>
-        {timeStamp && (
-          <div className={styles.time}>{formattedTime}</div>
+        {lines.map((line, idx) => (
+          <div key={idx} className={styles.text}>
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+              {line}
+            </ReactMarkdown>
+          </div>
+        ))}
+        {streaming && <div className={styles.streamingIndicator}>...</div>}
+        {time && (
+          <div
+            className={styles.time}
+            style={{
+              color: role !== "user" ? "var(--text-primary)" : "var(--text-on-accent)",
+            }}
+          >
+            {formattedTime}
+          </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

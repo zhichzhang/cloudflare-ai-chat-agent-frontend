@@ -5,14 +5,28 @@ import { ArrowUp } from "lucide-react";
 type Props = {
   disable: boolean;
   onSubmit: (query: string) => void;
-  placeholderText?: string;
+  placeholderTexts?: string[];
 };
 
-export default function UserInput({ onSubmit, disable, placeholderText = "Type your message..." }: Props) {
+export default function UserInput({
+  onSubmit,
+  disable,
+  placeholderTexts = [
+    "Can you introduce Cloudflare's products to me?",
+    "What is the weather in Los Angeles, CA?",
+    "How do I optimize serverless workflows?",
+    "What is the fastest way to query a database?",
+    "Explain edge computing in simple terms.",
+  ],
+}: Props) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isShort, setIsShort] = useState(false);
+  const [displayedText, setDisplayedText] = useState(placeholderTexts[0]);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const showPlaceholder = !query && !isFocused;
 
   useEffect(() => {
     if (!inputRef.current) return;
@@ -20,12 +34,43 @@ export default function UserInput({ onSubmit, disable, placeholderText = "Type y
     span.style.visibility = "hidden";
     span.style.position = "absolute";
     span.style.fontSize = "0.9rem";
-    span.innerText = placeholderText;
+    span.innerText = displayedText;
     document.body.appendChild(span);
     setIsShort(span.offsetWidth < inputRef.current.offsetWidth);
     document.body.removeChild(span);
-  }, [placeholderText]);
+  }, [displayedText]);
 
+  useEffect(() => {
+    if (!showPlaceholder) return;
+
+    const displayTime = 3000;
+    const fadeTime = 100;
+
+    let timeout1: number | undefined;
+    let timeout2: number | undefined;
+
+    const cycle = () => {
+      timeout1 = setTimeout(() => {
+        setIsVisible(false);
+
+        timeout2 = setTimeout(() => {
+          setDisplayedText((prev) => {
+            const currentIndex = placeholderTexts.indexOf(prev);
+            return placeholderTexts[(currentIndex + 1) % placeholderTexts.length];
+          });
+          setIsVisible(true);
+          cycle();
+        }, fadeTime);
+      }, displayTime);
+    };
+
+    cycle();
+
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
+  }, [showPlaceholder, placeholderTexts]);
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -37,8 +82,6 @@ export default function UserInput({ onSubmit, disable, placeholderText = "Type y
     onSubmit(query);
     setQuery("");
   };
-
-  const showPlaceholder = !query && !isFocused;
 
   return (
     <div className={styles.userInput}>
@@ -58,8 +101,26 @@ export default function UserInput({ onSubmit, disable, placeholderText = "Type y
             {showPlaceholder && (
               <div className={styles.scrollingPlaceholder}>
                 <div className={styles.placeholderWrapper} data-short={isShort}>
-                  <span className={styles.placeholderText}>{placeholderText}</span>
-                  {!isShort && <span className={styles.placeholderText}>{placeholderText}</span>}
+                  <span
+                    className={styles.placeholderText}
+                    style={{
+                      opacity: isVisible ? 1 : 0,
+                      transition: "opacity 0.5s ease-in-out",
+                    }}
+                  >
+                    {displayedText}
+                  </span>
+                  {!isShort && (
+                    <span
+                      className={styles.placeholderText}
+                      style={{
+                        opacity: isVisible ? 1 : 0,
+                        transition: "opacity 0.5s ease-in-out",
+                      }}
+                    >
+                      {displayedText}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -76,9 +137,17 @@ export default function UserInput({ onSubmit, disable, placeholderText = "Type y
             href="https://github.com/zhichzhang"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#aaa", textDecoration: "none", transition: "color 0.2s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
+            style={{
+              color: "#aaa",
+              textDecoration: "none",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = "var(--text-primary)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "var(--text-secondary)")
+            }
           >
             Zhicheng Zhang
           </a>
