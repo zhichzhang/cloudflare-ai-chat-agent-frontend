@@ -1,6 +1,6 @@
 # AI Chat Bot on Cloudflare [\[Live\]](https://zhicheng-zhang-cloudflare-ai-chat-agent.pages.dev/)
 
-This is a **Cloudflare Workers-based AI-powered chat application** built as part of an internship project. Users can interact with an LLM (Llama 3.3) in a chat interface with session memory.
+This is a **Cloudflare Workers-based AI-powered chat application** built as an optional assignment for the Cloudflare Summer Internship application. Users can interact with an LLM (Llama 3.3) in a chat interface with session memory.
 
 ## Features
 - **Chat with AI**: Send messages and receive responses from an AI model (Llama 3.3).  
