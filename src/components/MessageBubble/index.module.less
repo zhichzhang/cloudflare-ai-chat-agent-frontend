@@ -1,0 +1,89 @@
+.messageRow {
+  display: flex;
+  margin: 0;
+}
+
+.userRow {
+  justify-content: flex-end;
+}
+
+.agentRow {
+  justify-content: flex-start;
+}
+
+.bubble {
+  position: relative;
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.userRow .bubble {
+  margin-left: auto;
+  background-color: var(--text-primary);
+  color: var(--text-on-accent);
+  border-bottom-right-radius: 6px;
+  max-width: 70%;
+  width: fit-content;
+}
+
+.agentRow .bubble {
+  margin-right: auto;
+  background-color: var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+}
+
+.text {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.time {
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--text-on-accent);
+  text-align: right;
+}
+
+.thinkingDots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.thinkingDots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-secondary);
+  border-radius: 50%;
+  animation: blink 1.4s infinite ease-in-out;
+}
+
+.thinkingDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinkingDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
